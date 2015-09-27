@@ -180,8 +180,6 @@ QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
         counts[key.first]++;
     }
 
-    qDebug() << counts;
-
     // 2. Find the row with the fewest columns
     const QList<int> values = counts.values();
     const auto smallest = *std::min_element(values.cbegin(), values.cend());
@@ -280,7 +278,6 @@ void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
 
     // Resize widgets
     const QMap<int, QSize> sizes = calculateRowSizes();
-    qDebug() << sizes;
     for(auto it = sizes.cbegin(); it != sizes.cend(); ++it) {
         const auto row = it.key();
         auto lo = qobject_cast<QHBoxLayout *>(layout_->itemAt(row)->layout());
