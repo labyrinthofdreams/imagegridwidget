@@ -22,19 +22,38 @@ class ImageGridWidget : public QWidget
 {
     Q_OBJECT
 
+    //! Keeps track of the cursor position when drag 'n dropping
     QPoint point_;
 
+    //! Current layout
     QVBoxLayout *layout_;
 
+    //! If dragging
     bool isDragging_;
 
     using Index = QPair<int, int>;
+
+    //! Grid will be used to calculate the row sizes
     QMap<Index, QIcon> grid_;
 
+    /**
+     * @brief Insert icon as a new row before row
+     * @param row Row to insert before
+     * @param icon Icon to add
+     */
     void insertBefore(int row, const QIcon &icon);
 
+    /**
+     * @brief Insert icon into an existing row before index
+     * @param index Index to insert before
+     * @param icon Icon to add
+     */
     void insertBefore(Index index, const QIcon &icon);
 
+    /**
+     * @brief Calculate row sizes
+     * @return New row sizes
+     */
     QMap<int, QSize> calculateRowSizes() const;
 
 public:
