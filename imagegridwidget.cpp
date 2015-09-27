@@ -314,10 +314,11 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
                 QLayoutItem *item = layout_->itemAt(idx);
                 auto l = item->layout();
                 auto x = 0;
+                auto xIdx = 0;
                 // count() - 1 skips the QSpacerItem
                 // We need to store the value because insertBefore modifies layout
                 const auto count = l->count() - 1;
-                for(auto xIdx = 0; xIdx < count; ++xIdx) {
+                for(; xIdx < count; ++xIdx) {
                     const auto size = l->itemAt(xIdx)->sizeHint();
                     const auto spacing = l->spacing();
                     const auto width = size.width() + spacing;
@@ -336,6 +337,10 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
                     }
                 }
 
+                if(point_.x() > x) {
+                    insertBefore(qMakePair(idx, xIdx), icon);
+                }
+
                 break;
             }
         }
@@ -343,7 +348,7 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
         if(point_.y() > y) {
             // Insert icon after the last icon
             //grid_.insert(qMakePair(idx, 0), icon);
-            insertBefore(qMakePair(idx, 0), icon);
+            insertBefore(idx, icon);
         }
     }
 
