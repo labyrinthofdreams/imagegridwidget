@@ -238,7 +238,9 @@ void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
         auto lo = qobject_cast<QHBoxLayout *>(layout_->itemAt(row)->layout());
         // count() - 1 skips the spacer item
         for(auto idx = 0; idx < lo->count() - 1; ++idx) {
-            lo->itemAt(idx)->widget()->setFixedSize(it.value());
+            const QSize size = it.value();
+            const QPixmap pm = grid_.value(qMakePair(row, idx)).pixmap(size);
+            qobject_cast<QLabel *>(lo->itemAt(idx)->widget())->setPixmap(pm);
         }
     }
 }
