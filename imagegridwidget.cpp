@@ -135,18 +135,12 @@ QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
         counts[key.first]++;
     }
 
-    // 2. Find the row with the fewest columns
-    const QList<int> values = counts.values();
-    const auto smallest = *std::min_element(values.cbegin(), values.cend());
-
-    // 3. Minimum width will be used to calculate the new sizes
+    // 2. Minimum width will be used to calculate the new sizes
     // for each row where the column size differs
     const QPixmap pmIcon = grid_.first().pixmap(grid_.first().availableSizes().first());
-    const auto minWidthWithoutSpacing = smallest * pmIcon.width();
-    const auto spacingWidth = (smallest - 1) * layout_->spacing();
-    const auto minWidth = minWidthWithoutSpacing + spacingWidth;
+    const auto minWidth = pmIcon.width();
 
-    // 4. Calculate the image widths for each row
+    // 3. Calculate the image widths for each row
     QMap<int, QSize> sizes;
     for(auto it = counts.cbegin(); it != counts.cend(); ++it) {
         const auto numberOfImages = it.value();
@@ -154,7 +148,7 @@ QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
         const auto widthWithoutSpacing = minWidth - rowSpacing;
         const auto rowImgWidth = widthWithoutSpacing / numberOfImages;
         sizes.insert(it.key(), QSize(rowImgWidth,
-                                      calculateHeight(pmIcon, rowImgWidth)));
+                                     calculateHeight(pmIcon, rowImgWidth)));
     }
 
     return sizes;
