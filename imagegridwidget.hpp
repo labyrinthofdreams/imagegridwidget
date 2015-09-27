@@ -35,9 +35,6 @@ class ImageGridWidget : public QWidget
 
     void insertBefore(Index index, const QIcon &icon);
 
-    int getRowCount() const;
-    int getColumnsForRow(int row) const;
-
     QMap<int, QSize> calculateRowSizes() const;
 
 public:

@@ -105,27 +105,6 @@ ImageGridWidget::ImageGridWidget(QWidget *parent) :
     setMouseTracking(true);
 }
 
-
-
-int ImageGridWidget::getRowCount() const
-{
-    const QList<Index> keys = grid_.keys();
-    if(keys.isEmpty()) {
-        return 0;
-    }
-
-    const auto l = [](const Index &lhs, const Index &rhs){ return lhs.first < rhs.first; };
-    const Index max = *std::max_element(keys.cbegin(), keys.cend(), l);
-    return max.first + 1;
-}
-
-int ImageGridWidget::getColumnsForRow(const int row) const
-{
-    const QList<Index> keys = grid_.keys();
-    return std::count_if(keys.cbegin(), keys.cend(),
-                         [&row](const Index &key){ return key.first == row; });
-}
-
 QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
 {
     // 1. Calculate how many columns each row has
