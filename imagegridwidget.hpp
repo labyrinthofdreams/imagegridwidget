@@ -31,10 +31,6 @@ class ImageGridWidget : public QWidget
     using Index = QPair<int, int>;
     QMap<Index, QIcon> grid_;
 
-    QList<QLayoutItem *> widgets_;
-
-    void buildLayout();
-
     void insertBefore(int row, const QIcon &icon);
 
     void insertBefore(Index index, const QIcon &icon);
@@ -46,8 +42,6 @@ class ImageGridWidget : public QWidget
 
 public:
     explicit ImageGridWidget(QWidget *parent = 0);
-
-    void clear();
 
 signals:
 

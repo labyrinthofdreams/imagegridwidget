@@ -105,52 +105,7 @@ ImageGridWidget::ImageGridWidget(QWidget *parent) :
     setMouseTracking(true);
 }
 
-void ImageGridWidget::clear()
-{
-    for(QLayoutItem *it : widgets_) {
-        if(it->widget()) {
-            delete it->widget();
-        }
-        else if(it->spacerItem()) {
-            delete it->spacerItem();
-        }
-    }
 
-    widgets_.clear();
-}
-
-void ImageGridWidget::buildLayout()
-{
-    clear();
-
-    const auto sizes = calculateRowSizes();
-
-    const auto rows = getRowCount();
-    for(auto row = 0; row != rows; ++row) {
-        auto lo = new QHBoxLayout;
-        const auto cols = getColumnsForRow(row);
-        for(auto col = 0; col != cols; ++col) {
-            qDebug() << row << "x" << col;
-            const QSize size = sizes.value(row);
-            const QIcon icon = grid_.value(qMakePair(row, col));
-            const QPixmap pm = icon.pixmap(icon.availableSizes().first());
-            auto label = new QLabel;
-            label->setPixmap(pm.scaled(size));
-            lo->addWidget(label);
-            widgets_.append(new QWidgetItem(label));
-        }
-
-        auto spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding);
-        widgets_.append(spacer);
-        lo->addSpacerItem(spacer);
-        lo->setSpacing(layout_->spacing());
-        layout_->addLayout(lo);
-    }
-
-    auto spacer = new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    layout_->addSpacerItem(spacer);
-    widgets_.append(spacer);
-}
 
 int ImageGridWidget::getRowCount() const
 {
