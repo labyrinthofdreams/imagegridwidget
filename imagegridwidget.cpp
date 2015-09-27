@@ -315,6 +315,7 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
                 auto l = item->layout();
                 auto x = 0;
                 // count() - 1 skips the QSpacerItem
+                // We need to store the value because insertBefore modifies layout
                 const auto count = l->count() - 1;
                 for(auto xIdx = 0; xIdx < count; ++xIdx) {
                     const auto size = l->itemAt(xIdx)->sizeHint();
@@ -327,9 +328,11 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
 
                     if(side == Left) {
                         insertBefore(qMakePair(idx, xIdx), icon);
+                        break;
                     }
                     else {
                         insertBefore(qMakePair(idx, xIdx + 1), icon);
+                        break;
                     }
                 }
 
