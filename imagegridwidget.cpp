@@ -94,7 +94,8 @@ ImageGridWidget::ImageGridWidget(QWidget *parent) :
     QWidget(parent),
     point_(),
     layout_(new QVBoxLayout),
-    isDragging_(false)
+    isDragging_(false),
+    grid_()
 {
     layout_->setSpacing(10);
     layout_->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
