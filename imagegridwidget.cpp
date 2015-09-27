@@ -343,45 +343,68 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
         painter.drawLine(0, 0, width(), 0);
     }
     else {
+        const auto spacing = layout_->spacing();
+        const auto halfSpacing = spacing / 2 - 2;
         auto y = 0;
         auto idx = 0;
         // count() - 1 skips the QSpacerItem
         for(; idx != layout_->count() - 1; ++idx) {
             const auto layoutSize = layout_->itemAt(idx)->sizeHint();
-            const auto spacing = layout_->spacing();
+
             const auto height = layoutSize.height() + spacing;
             y += height;
             if(point_.y() > y) {
                 continue;
             }
 
-            const QPoint imageArea(layoutSize.width(), height);
-
             // Point relative to the current image
             auto adjusted = point_;
             adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
-            const auto side = getSide(adjusted, imageArea);
+
+            QLayout *layout = layout_->itemAt(idx)->layout();
+            QSize imageArea;
+            auto x = 0;
+            auto xIdx = 0;
+            auto width = 0;
+            for(; xIdx < layout->count() - 1; ++xIdx) {
+                imageArea = layout->itemAt(xIdx)->sizeHint();
+                width = imageArea.width() + spacing;
+                x += width;
+                if(point_.x() > x) {
+                    continue;
+                }
+
+                adjusted -= QPoint(xIdx == 0 ? 0 : x - width, 0);
+
+                break;
+            }
+
+            x--;
+            y--;
+
+            const auto side = getSide(adjusted, QPoint(imageArea.width(), imageArea.height()));
             if(side == Top) {
-                painter.drawLine(0, y - height, layoutSize.width(), y - height);
+                painter.drawLine(x - width + spacing, y - height + halfSpacing, x, y - height + halfSpacing);
                 break;
             }
             else if(side == Bottom) {
-                painter.drawLine(0, y, layoutSize.width(), y);
+                painter.drawLine(x - width + spacing, y + halfSpacing, x, y + halfSpacing);
                 break;
             }
             else if(side == Left) {
-                painter.drawLine(0, y - height, 0, y);
+                painter.drawLine(x - width + halfSpacing, y - height + spacing, x - width + halfSpacing, y);
                 break;
             }
             else if(side == Right) {
-                painter.drawLine(layoutSize.width() + spacing, y - height,
-                                 layoutSize.width() + spacing, y);
+                painter.drawLine(x + halfSpacing, y - height + spacing, x + halfSpacing, y);
                 break;
             }
         }
 
         if(point_.y() > y) {
-            painter.drawLine(0, y, layout_->sizeHint().width(), y);
+            y--;
+            painter.drawLine(spacing - 1, y + halfSpacing,
+                             layout_->sizeHint().width() - spacing, y + halfSpacing);
         }
     }
 }
