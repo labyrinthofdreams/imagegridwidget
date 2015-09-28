@@ -209,14 +209,30 @@ void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
 
 void ImageGridWidget::resizeWidgets()
 {
+    if(grid_.isEmpty()) {
+        return;
+    }
+
+    const QPixmap pmIcon = grid_.first().pixmap(grid_.first().availableSizes().first());
+    const auto minWidth = pmIcon.width();
+    const auto spacing = layout_->spacing();
     const QMap<int, QSize> sizes = calculateRowSizes();
     for(auto it = sizes.cbegin(); it != sizes.cend(); ++it) {
         const auto row = it.key();
         auto lo = qobject_cast<QHBoxLayout *>(layout_->itemAt(row)->layout());
         // count() - 1 skips the spacer item
-        for(auto idx = 0; idx < lo->count() - 1; ++idx) {
-            const QSize size = it.value();
-            const QPixmap pm = grid_.value(qMakePair(row, idx)).pixmap(size);
+        const auto count = lo->count() - 1;
+        for(auto idx = 0; idx < count; ++idx) {
+            QSize size = it.value();
+            if(idx + 1 == count) {
+                // If last widget, resize width to fill the minimum width
+                const auto pixelsTaken = ((idx + 1) * size.width()) + (idx * spacing);
+                const auto extraPixels = minWidth - pixelsTaken;
+                qDebug() << size << minWidth << pixelsTaken << extraPixels;
+                size.setWidth(size.width() + extraPixels);
+            }
+
+            const QPixmap pm = grid_.value(qMakePair(row, idx)).pixmap(size).scaled(size);
             qobject_cast<QLabel *>(lo->itemAt(idx)->widget())->setPixmap(pm);
         }
     }
