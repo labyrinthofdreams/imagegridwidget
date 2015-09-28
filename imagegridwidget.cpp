@@ -204,7 +204,11 @@ void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
     auto lo = qobject_cast<QHBoxLayout *>(layout_->itemAt(index.first)->layout());
     lo->insertWidget(index.second, label);
 
-    // Resize widgets
+    resizeWidgets();
+}
+
+void ImageGridWidget::resizeWidgets()
+{
     const QMap<int, QSize> sizes = calculateRowSizes();
     for(auto it = sizes.cbegin(); it != sizes.cend(); ++it) {
         const auto row = it.key();
