@@ -61,6 +61,13 @@ class ImageGridWidget : public QWidget
      */
     QPair<int, int> getVertical() const;
 
+    /**
+     * @brief Get horizontal data (width, index) for current cursor position
+     * @param yIndex Vertical index to get data for
+     * @return Horizontal data
+     */
+    QPair<int, int> getHorizontal(int yIndex) const;
+
 public:
     explicit ImageGridWidget(QWidget *parent = 0);
 

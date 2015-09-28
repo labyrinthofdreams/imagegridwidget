@@ -341,61 +341,53 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
     painter.setPen(Qt::blue);
     if(layout_->isEmpty()) {
         painter.drawLine(0, 0, width(), 0);
+        return;
     }
-    else {
-        const auto spacing = layout_->spacing();
-        const auto halfSpacing = spacing / 2 - 2;
 
-        const QPair<int, int> v = getVertical();
-        auto y = v.first;
-        const auto idx = v.second;
-        if(point_.y() < v.first) {
-            const auto layoutSize = layout_->itemAt(idx)->sizeHint();
-            const auto height = layoutSize.height() + spacing;
-            // Point relative to the current image
-            auto adjusted = point_;
-            adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
+    const auto spacing = layout_->spacing();
+    const auto halfSpacing = spacing / 2 - 2;
 
-            QLayout *layout = layout_->itemAt(idx)->layout();
-            QSize imageArea;
-            auto x = 0;
-            auto xIdx = 0;
-            auto width = 0;
-            for(; xIdx < layout->count() - 1; ++xIdx) {
-                imageArea = layout->itemAt(xIdx)->sizeHint();
-                width = imageArea.width() + spacing;
-                x += width;
-                if(point_.x() > x) {
-                    continue;
-                }
+    const QPair<int, int> v = getVertical();
+    auto y = v.first;
+    const auto idx = v.second;
+    if(point_.y() > y) {
+        y--;
+        painter.drawLine(spacing - 1, y + halfSpacing,
+                         layout_->sizeHint().width() - spacing, y + halfSpacing);
+        return;
+    }
 
-                adjusted -= QPoint(xIdx == 0 ? 0 : x - width, 0);
+    const auto layoutSize = layout_->itemAt(idx)->sizeHint();
+    const auto height = layoutSize.height() + spacing;
+    // Point relative to the current image
+    auto adjusted = point_;
+    adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
 
-                break;
-            }
+    const QPair<int, int> h = getHorizontal(idx);
+    auto x = h.first;
+    const auto xIdx = h.second;
 
-            x--;
-            y--;
+    // Get image size for current image
+    const QSize imageSize = layout_->itemAt(idx)->layout()->itemAt(xIdx)->sizeHint();
+    const auto width = imageSize.width() + spacing;
 
-            const auto side = getSide(adjusted, QPoint(imageArea.width(), imageArea.height()));
-            if(side == Top) {
-                painter.drawLine(x - width + spacing, y - height + halfSpacing, x, y - height + halfSpacing);
-            }
-            else if(side == Bottom) {
-                painter.drawLine(x - width + spacing, y + halfSpacing, x, y + halfSpacing);
-            }
-            else if(side == Left) {
-                painter.drawLine(x - width + halfSpacing, y - height + spacing, x - width + halfSpacing, y);
-            }
-            else if(side == Right) {
-                painter.drawLine(x + halfSpacing, y - height + spacing, x + halfSpacing, y);
-            }
-        }
-        else {
-            y--;
-            painter.drawLine(spacing - 1, y + halfSpacing,
-                             layout_->sizeHint().width() - spacing, y + halfSpacing);
-        }
+    adjusted -= QPoint(xIdx == 0 ? 0 : x - width, 0);
+
+    x--;
+    y--;
+
+    const auto side = getSide(adjusted, QPoint(imageSize.width(), imageSize.height()));
+    if(side == Top) {
+        painter.drawLine(x - width + spacing, y - height + halfSpacing, x, y - height + halfSpacing);
+    }
+    else if(side == Bottom) {
+        painter.drawLine(x - width + spacing, y + halfSpacing, x, y + halfSpacing);
+    }
+    else if(side == Left) {
+        painter.drawLine(x - width + halfSpacing, y - height + spacing, x - width + halfSpacing, y);
+    }
+    else if(side == Right) {
+        painter.drawLine(x + halfSpacing, y - height + spacing, x + halfSpacing, y);
     }
 }
 
@@ -418,4 +410,26 @@ QPair<int, int> ImageGridWidget::getVertical() const
     }
 
     return qMakePair(y, idx);
+}
+
+QPair<int, int> ImageGridWidget::getHorizontal(const int yIndex) const
+{
+    QLayout *layout = layout_->itemAt(yIndex)->layout();
+    const auto spacing = layout_->spacing();
+    auto x = 0;
+    auto xIdx = 0;
+    auto width = 0;
+    for(; xIdx < layout->count() - 1; ++xIdx) {
+        const QSize imageArea = layout->itemAt(xIdx)->sizeHint();
+        width = imageArea.width() + spacing;
+        x += width;
+        if(point_.x() > x) {
+            continue;
+        }
+        else {
+            break;
+        }
+    }
+
+    return qMakePair(x, xIdx);
 }
