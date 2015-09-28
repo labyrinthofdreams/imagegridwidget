@@ -27,12 +27,12 @@ THE SOFTWARE.
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
 #include <QDropEvent>
-#include <QPaintEvent>
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLabel>
 #include <QListWidget>
 #include <QPainter>
+#include <QPaintEvent>
 #include <QPixmap>
 #include <QPoint>
 #include <QSize>
