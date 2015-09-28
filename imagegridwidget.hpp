@@ -76,6 +76,7 @@ public:
 signals:
 
 public slots:
+    void setSpacing(int spacing);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

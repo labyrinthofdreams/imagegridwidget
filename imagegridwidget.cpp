@@ -222,6 +222,13 @@ void ImageGridWidget::resizeWidgets()
     }
 }
 
+void ImageGridWidget::setSpacing(const int spacing)
+{
+    layout_->setSpacing(spacing);
+
+    resizeWidgets();
+}
+
 void ImageGridWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();

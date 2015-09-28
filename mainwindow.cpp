@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->spinBox->setValue(10);
 
     const auto list = QFileDialog::getOpenFileNames();
     if(list.isEmpty()) {
@@ -38,4 +39,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::on_spinBox_valueChanged(const int arg1)
+{
+    ui->widget->setSpacing(arg1);
 }
