@@ -253,77 +253,52 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
 
     // Decide where to put the widget...
     if(layout_->isEmpty()) {
-        //grid_.insert(qMakePair(0, 0), icon);
         insertBefore(0, icon);
+        return;
     }
-    else {
-        auto y = 0;
-        auto idx = 0;
-        // count() - 1 skips the QSpacerItem
-        for(; idx != layout_->count() - 1; ++idx) {
-            const auto layoutSize = layout_->itemAt(idx)->sizeHint();
-            const auto spacing = layout_->spacing();
-            const auto height = layoutSize.height() + spacing;
-            y += height;
-            if(point_.y() > y) {
-                continue;
-            }
 
-            const QPoint imageArea(layoutSize.width(), height);
+    const auto spacing = layout_->spacing();
 
-            // Point relative to the current image
-            auto adjusted = point_;
-            adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
-            const auto side = getSide(adjusted, imageArea);
-            if(side == Top) {
-                insertBefore(idx, icon);
-                break;
-            }
-            else if(side == Bottom) {
-                insertBefore(idx + 1, icon);
-                break;
-            }
-            else if(side == Left || side == Right) {
-                // Find x
-                QLayoutItem *item = layout_->itemAt(idx);
-                auto l = item->layout();
-                auto x = 0;
-                auto xIdx = 0;
-                // count() - 1 skips the QSpacerItem
-                // We need to store the value because insertBefore modifies layout
-                const auto count = l->count() - 1;
-                for(; xIdx < count; ++xIdx) {
-                    const auto size = l->itemAt(xIdx)->sizeHint();
-                    const auto spacing = l->spacing();
-                    const auto width = size.width() + spacing;
-                    x += width;
-                    if(point_.x() > x) {
-                        continue;
-                    }
+    const QPair<int, int> v = getVertical();
+    auto y = v.first;
+    const auto idx = v.second;
+    if(point_.y() > y) {
+        insertBefore(idx, icon);
+        return;
+    }
 
-                    if(side == Left) {
-                        insertBefore(qMakePair(idx, xIdx), icon);
-                        break;
-                    }
-                    else {
-                        insertBefore(qMakePair(idx, xIdx + 1), icon);
-                        break;
-                    }
-                }
+    const auto layoutSize = layout_->itemAt(idx)->sizeHint();
+    const auto height = layoutSize.height() + spacing;
+    // Point relative to the current image
+    auto adjusted = point_;
+    adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
 
-                if(point_.x() > x) {
-                    insertBefore(qMakePair(idx, xIdx), icon);
-                }
+    const QPair<int, int> h = getHorizontal(idx);
+    auto x = h.first;
+    const auto xIdx = h.second;
+    if(point_.x() > x) {
+        insertBefore(qMakePair(idx, xIdx + 1), icon);
+        return;
+    }
 
-                break;
-            }
-        }
+    // Get image size for current image
+    const QSize imageSize = layout_->itemAt(idx)->layout()->itemAt(xIdx)->sizeHint();
+    const auto width = imageSize.width() + spacing;
 
-        if(point_.y() > y) {
-            // Insert icon after the last icon
-            //grid_.insert(qMakePair(idx, 0), icon);
-            insertBefore(idx, icon);
-        }
+    adjusted -= QPoint(xIdx == 0 ? 0 : x - width, 0);
+
+    const auto side = getSide(adjusted, QPoint(imageSize.width(), imageSize.height()));
+    if(side == Top) {
+        insertBefore(idx, icon);
+    }
+    else if(side == Bottom) {
+        insertBefore(idx + 1, icon);
+    }
+    else if(side == Left) {
+        insertBefore(qMakePair(idx, xIdx), icon);
+    }
+    else if(side == Right) {
+        insertBefore(qMakePair(idx, xIdx + 1), icon);
     }
 
     repaint();
