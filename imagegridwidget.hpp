@@ -26,7 +26,6 @@ THE SOFTWARE.
 #define IMAGEGRIDWIDGET_HPP
 
 #include <QIcon>
-#include <QList>
 #include <QMap>
 #include <QPair>
 #include <QPoint>
@@ -37,7 +36,6 @@ class QDragEnterEvent;
 class QDragLeaveEvent;
 class QDragMoveEvent;
 class QDropEvent;
-class QLayoutItem;
 class QPaintEvent;
 class QVBoxLayout;
 

@@ -22,11 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ******************************************************************************/
 
-#include <algorithm>
-#include <iterator>
-#include <QtCore>
-#include <QtGui>
-#include <QtWidgets>
+#include <QDebug>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
+#include <QPaintEvent>
+#include <QHBoxLayout>
+#include <QIcon>
+#include <QLabel>
+#include <QListWidget>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QSize>
+#include <QSpacerItem>
+#include <QVBoxLayout>
 #include "imagegridwidget.hpp"
 
 namespace {
