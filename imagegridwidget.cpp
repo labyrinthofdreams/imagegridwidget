@@ -345,18 +345,13 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
     else {
         const auto spacing = layout_->spacing();
         const auto halfSpacing = spacing / 2 - 2;
-        auto y = 0;
-        auto idx = 0;
-        // count() - 1 skips the QSpacerItem
-        for(; idx != layout_->count() - 1; ++idx) {
+
+        const QPair<int, int> v = getVertical();
+        auto y = v.first;
+        const auto idx = v.second;
+        if(point_.y() < v.first) {
             const auto layoutSize = layout_->itemAt(idx)->sizeHint();
-
             const auto height = layoutSize.height() + spacing;
-            y += height;
-            if(point_.y() > y) {
-                continue;
-            }
-
             // Point relative to the current image
             auto adjusted = point_;
             adjusted -= QPoint(0, idx == 0 ? 0 : y - height);
@@ -385,26 +380,42 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
             const auto side = getSide(adjusted, QPoint(imageArea.width(), imageArea.height()));
             if(side == Top) {
                 painter.drawLine(x - width + spacing, y - height + halfSpacing, x, y - height + halfSpacing);
-                break;
             }
             else if(side == Bottom) {
                 painter.drawLine(x - width + spacing, y + halfSpacing, x, y + halfSpacing);
-                break;
             }
             else if(side == Left) {
                 painter.drawLine(x - width + halfSpacing, y - height + spacing, x - width + halfSpacing, y);
-                break;
             }
             else if(side == Right) {
                 painter.drawLine(x + halfSpacing, y - height + spacing, x + halfSpacing, y);
-                break;
             }
         }
-
-        if(point_.y() > y) {
+        else {
             y--;
             painter.drawLine(spacing - 1, y + halfSpacing,
                              layout_->sizeHint().width() - spacing, y + halfSpacing);
         }
     }
+}
+
+QPair<int, int> ImageGridWidget::getVertical() const
+{
+    auto y = 0;
+    auto idx = 0;
+    const auto spacing = layout_->spacing();
+    // count() - 1 skips the QSpacerItem
+    for(; idx != layout_->count() - 1; ++idx) {
+        const auto layoutSize = layout_->itemAt(idx)->sizeHint();
+        const auto height = layoutSize.height() + spacing;
+        y += height;
+        if(point_.y() > y) {
+            continue;
+        }
+        else {
+            break;
+        }
+    }
+
+    return qMakePair(y, idx);
 }

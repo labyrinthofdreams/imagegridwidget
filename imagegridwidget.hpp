@@ -16,7 +16,6 @@ class QDropEvent;
 class QLayoutItem;
 class QPaintEvent;
 class QVBoxLayout;
-template <class I, class U> class QPair;
 
 class ImageGridWidget : public QWidget
 {
@@ -55,6 +54,12 @@ class ImageGridWidget : public QWidget
      * @return New row sizes
      */
     QMap<int, QSize> calculateRowSizes() const;
+
+    /**
+     * @brief Get vertical data (height, index) for current cursor position
+     * @return Vertical data
+     */
+    QPair<int, int> getVertical() const;
 
 public:
     explicit ImageGridWidget(QWidget *parent = 0);
