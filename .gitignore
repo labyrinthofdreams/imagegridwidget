@@ -3,6 +3,7 @@
 !demo/data/*.png
 !demo/
 !.gitignore
+!README.md
 !*.cpp
 !*.hpp
 !*.pro
