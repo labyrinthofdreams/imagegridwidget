@@ -389,7 +389,7 @@ QPair<int, int> ImageGridWidget::getVertical() const
 
 QPair<int, int> ImageGridWidget::getHorizontal(const int yIndex) const
 {
-    QLayout *layout = layout_->itemAt(yIndex)->layout();
+    const QLayout *layout = layout_->itemAt(yIndex)->layout();
     const auto spacing = layout_->spacing();
     auto x = 0;
     auto xIdx = 0;
