@@ -90,6 +90,9 @@ class ImageGridWidget : public QWidget
      */
     QPair<int, int> getHorizontal(int yIndex) const;
 
+    /**
+     * @brief Resize widgets
+     */
     void resizeWidgets();
 
 public:
