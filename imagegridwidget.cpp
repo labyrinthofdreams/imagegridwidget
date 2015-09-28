@@ -126,14 +126,14 @@ Side getSide(const QPoint &needle, const QPoint &haystack) {
 // TODO: Drag n' drop existing images in the layout
 // so that we don't have to undo the whole thing to reset
 
-ImageGridWidget::ImageGridWidget(QWidget *parent) :
+ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     QWidget(parent),
     point_(),
     layout_(new QVBoxLayout),
     isDragging_(false),
     grid_()
 {
-    layout_->setSpacing(10);
+    layout_->setSpacing(spacing);
     layout_->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
 
     setAcceptDrops(true);
