@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    imagegridwidget.cpp
+    ..\imagegridwidget.cpp
 
 HEADERS  += mainwindow.hpp \
-    imagegridwidget.hpp
+    ..\imagegridwidget.hpp
 
 FORMS    += mainwindow.ui
 
