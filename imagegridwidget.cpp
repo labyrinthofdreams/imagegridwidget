@@ -102,7 +102,6 @@ ImageGridWidget::ImageGridWidget(QWidget *parent) :
 
     setAcceptDrops(true);
     setLayout(layout_);
-    setMaximumHeight(800);
     setMouseTracking(true);
 }
 
