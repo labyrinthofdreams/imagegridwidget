@@ -96,6 +96,7 @@ class ImageGridWidget : public QWidget
     void resizeWidgets();
 
 public:
+    explicit ImageGridWidget(QWidget *parent = 0);
     explicit ImageGridWidget(int spacing = 0, QWidget *parent = 0);
 
 signals:

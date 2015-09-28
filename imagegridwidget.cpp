@@ -126,6 +126,12 @@ Side getSide(const QPoint &needle, const QPoint &haystack) {
 // TODO: Drag n' drop existing images in the layout
 // so that we don't have to undo the whole thing to reset
 
+ImageGridWidget::ImageGridWidget(QWidget *parent) :
+    ImageGridWidget(0, parent)
+{
+
+}
+
 ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     QWidget(parent),
     point_(),
