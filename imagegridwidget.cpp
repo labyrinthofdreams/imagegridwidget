@@ -178,6 +178,12 @@ QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
 void ImageGridWidget::insertBefore(const int row, const QIcon &icon)
 {
     if(row < 0) {
+        qWarning("ImageGridWidget::insertBefore: Negative row: %d", row);
+        return;
+    }
+
+    if(icon.isNull()) {
+        qWarning("ImageGridWidget::insertBefore: Null icon");
         return;
     }
 
@@ -217,6 +223,13 @@ void ImageGridWidget::insertBefore(const int row, const QIcon &icon)
 void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
 {
     if(index.first < 0 || index.second < 0) {
+        qWarning("ImageGridWidget::insertBefore: Negative index: %dx%d",
+                 index.first, index.second);
+        return;
+    }
+
+    if(icon.isNull()) {
+        qWarning("ImageGridWidget::insertBefore: Null icon");
         return;
     }
 
@@ -282,6 +295,11 @@ void ImageGridWidget::resizeWidgets()
 
 void ImageGridWidget::setSpacing(const int spacing)
 {
+    if(spacing < 0) {
+        qWarning("ImageGridWidget::setSpacing: Negative spacing: %d", spacing);
+        return;
+    }
+
     layout_->setSpacing(spacing);
 
     resizeWidgets();
@@ -457,6 +475,11 @@ QPair<int, int> ImageGridWidget::getVertical() const
 
 QPair<int, int> ImageGridWidget::getHorizontal(const int yIndex) const
 {
+    if(yIndex < 0) {
+        qWarning("ImageGridWidget::getHorizontal: Negative index: %d", yIndex);
+        return {};
+    }
+
     const QLayout *layout = layout_->itemAt(yIndex)->layout();
     const auto spacing = layout_->spacing();
     auto x = 0;
