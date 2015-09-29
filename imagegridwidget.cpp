@@ -137,7 +137,8 @@ ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     point_(),
     layout_(new QVBoxLayout),
     isDragging_(false),
-    grid_()
+    grid_(),
+    width_(0)
 {
     layout_->setSpacing(spacing);
     layout_->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -159,7 +160,7 @@ QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
     // 2. Minimum width will be used to calculate the new sizes
     // for each row where the column size differs
     const QPixmap pmIcon = grid_.first().pixmap(grid_.first().availableSizes().first());
-    const auto minWidth = pmIcon.width();
+    const auto minWidth = width_ > 0 ? width_ : pmIcon.width();
 
     // 3. Calculate the image widths for each row
     QMap<int, QSize> sizes;
@@ -268,8 +269,9 @@ void ImageGridWidget::resizeWidgets()
         return;
     }
 
-    const QPixmap pmIcon = grid_.first().pixmap(grid_.first().availableSizes().first());
-    const auto minWidth = pmIcon.width();
+    const auto minWidth = width_ > 0 ? width_ :
+        grid_.first().pixmap(grid_.first().availableSizes().first()).width();
+
     const auto spacing = layout_->spacing();
     const QMap<int, QSize> sizes = calculateRowSizes();
     for(auto it = sizes.cbegin(); it != sizes.cend(); ++it) {
@@ -283,7 +285,6 @@ void ImageGridWidget::resizeWidgets()
                 // If last widget, resize width to fill the minimum width
                 const auto pixelsTaken = ((idx + 1) * size.width()) + (idx * spacing);
                 const auto extraPixels = minWidth - pixelsTaken;
-                qDebug() << size << minWidth << pixelsTaken << extraPixels;
                 size.setWidth(size.width() + extraPixels);
             }
 
@@ -301,6 +302,18 @@ void ImageGridWidget::setSpacing(const int spacing)
     }
 
     layout_->setSpacing(spacing);
+
+    resizeWidgets();
+}
+
+void ImageGridWidget::setWidth(const int width)
+{
+    if(width < 0) {
+        qWarning("ImageGridWidget::setWidth: Negative width: %d", width);
+        return;
+    }
+
+    width_ = width;
 
     resizeWidgets();
 }

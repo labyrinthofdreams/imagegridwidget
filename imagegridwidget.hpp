@@ -58,6 +58,9 @@ class ImageGridWidget : public QWidget
     //! Grid will be used to calculate the row sizes
     QMap<Index, QIcon> grid_;
 
+    //! Layout width
+    int width_;
+
     /**
      * @brief Insert icon as a new row before row
      * @param row Row to insert before
@@ -101,12 +104,15 @@ public:
      * @brief Constructor
      *
      * Sets default spacing to 0
+     * Sets default width to 0
      * @param parent Owner of the widget
      */
     explicit ImageGridWidget(QWidget *parent = 0);
 
     /**
      * @brief Constructor
+     *
+     * Sets default width to 0
      * @param spacing Space between images in pixels
      * @param parent Owner of the widget
      */
@@ -120,6 +126,14 @@ public slots:
      * @param spacing Space between images
      */
     void setSpacing(int spacing);
+
+    /**
+     * @brief Set layout width
+     *
+     * A value of zero will use image width as width
+     * @param width Width in pixels
+     */
+    void setWidth(int width);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;

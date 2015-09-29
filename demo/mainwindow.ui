@@ -23,6 +23,16 @@
      </widget>
     </item>
     <item>
+     <widget class="QSpinBox" name="spinBox_2">
+      <property name="maximum">
+       <number>9999</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -42,7 +52,7 @@
           <x>0</x>
           <y>0</y>
           <width>69</width>
-          <height>273</height>
+          <height>247</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">

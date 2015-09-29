@@ -62,3 +62,8 @@ void MainWindow::on_spinBox_valueChanged(const int arg1)
 {
     ui.widget->setSpacing(arg1);
 }
+
+void MainWindow::on_spinBox_2_valueChanged(const int arg1)
+{
+    ui.widget->setWidth(arg1);
+}
