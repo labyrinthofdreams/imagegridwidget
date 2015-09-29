@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui()
 {
     ui.setupUi(this);
-    ui.spinBox->setValue(10);
+    ui.spinBox->setValue(0);
 
     const auto list = QFileDialog::getOpenFileNames();
     if(list.isEmpty()) {
