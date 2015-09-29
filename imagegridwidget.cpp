@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ******************************************************************************/
 
-#include <QDebug>
+#include <QBrush>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include <QListWidget>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPen>
 #include <QPixmap>
 #include <QPoint>
 #include <QSize>
@@ -138,7 +139,8 @@ ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     layout_(new QVBoxLayout),
     isDragging_(false),
     grid_(),
-    width_(0)
+    width_(0),
+    pen_(QPen(QBrush(Qt::blue, Qt::SolidPattern), 1))
 {
     layout_->setSpacing(spacing);
     layout_->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -318,6 +320,11 @@ void ImageGridWidget::setWidth(const int width)
     resizeWidgets();
 }
 
+void ImageGridWidget::setPen(const QPen &pen)
+{
+    pen_ = pen;
+}
+
 void ImageGridWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
@@ -412,7 +419,7 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
     }
 
     QPainter painter(this);
-    painter.setPen(Qt::blue);
+    painter.setPen(pen_);
     if(layout_->isEmpty()) {
         painter.drawLine(0, 0, width(), 0);
         return;

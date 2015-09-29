@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include <QIcon>
 #include <QMap>
 #include <QPair>
+#include <QPen>
 #include <QPoint>
 #include <QSize>
 #include <QWidget>
@@ -60,6 +61,9 @@ class ImageGridWidget : public QWidget
 
     //! Layout width
     int width_;
+
+    //! Pen for drawing helper lines
+    QPen pen_;
 
     /**
      * @brief Insert icon as a new row before row
@@ -134,6 +138,12 @@ public slots:
      * @param width Width in pixels
      */
     void setWidth(int width);
+
+    /**
+     * @brief Set pen for styles
+     * @param pen New pen
+     */
+    void setPen(const QPen &pen);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
