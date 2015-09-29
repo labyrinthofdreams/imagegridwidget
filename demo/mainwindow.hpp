@@ -37,13 +37,13 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    ~MainWindow() = default;
 
 private slots:
     void on_spinBox_valueChanged(int arg1);
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow ui;
 };
 
 #endif // MAINWINDOW_HPP

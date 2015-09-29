@@ -33,10 +33,10 @@ THE SOFTWARE.
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui()
 {
-    ui->setupUi(this);
-    ui->spinBox->setValue(10);
+    ui.setupUi(this);
+    ui.spinBox->setValue(10);
 
     const auto list = QFileDialog::getOpenFileNames();
     if(list.isEmpty()) {
@@ -52,17 +52,12 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->listWidget->insertItem(0, w);
     }
 
-    ui->listWidget->setResizeMode(QListView::Adjust);
+    ui.listWidget->setResizeMode(QListView::Adjust);
     QImage image;
     image.load(list.first());
-    ui->listWidget->setIconSize(image.scaledToWidth(150).size());
-    ui->listWidget->setFixedWidth(180);
-    ui->listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-}
-
-MainWindow::~MainWindow()
-{
-    delete ui;
+    ui.listWidget->setIconSize(image.scaledToWidth(150).size());
+    ui.listWidget->setFixedWidth(180);
+    ui.listWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void MainWindow::on_spinBox_valueChanged(const int arg1)
