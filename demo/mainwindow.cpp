@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include <QListWidgetItem>
 #include <QSize>
 #include "mainwindow.hpp"
-#include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -48,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QIcon icon;
         icon.addFile(item);
         w->setIcon(icon);
-        ui->listWidget->insertItem(0, w);
+        ui.listWidget->insertItem(0, w);
     }
 
     ui.listWidget->setResizeMode(QListView::Adjust);
@@ -61,5 +60,5 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::on_spinBox_valueChanged(const int arg1)
 {
-    ui->widget->setSpacing(arg1);
+    ui.widget->setSpacing(arg1);
 }

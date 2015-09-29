@@ -26,6 +26,7 @@ THE SOFTWARE.
 #define MAINWINDOW_HPP
 
 #include <QMainWindow>
+#include "ui_mainwindow.h"
 
 namespace Ui {
 class MainWindow;
