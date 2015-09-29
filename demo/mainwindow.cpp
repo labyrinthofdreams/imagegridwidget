@@ -43,7 +43,6 @@ MainWindow::MainWindow(QWidget *parent) :
         return;
     }
 
-    QList<QListWidgetItem*> items;
     for(const auto &item : list) {
         auto w = new QListWidgetItem;
         QIcon icon;
