@@ -52,6 +52,7 @@ class ImageGridWidget : public QWidget
     //! If dragging
     bool isDragging_;
 
+    //! Represents a position in the grid
     using Index = QPair<int, int>;
 
     //! Grid will be used to calculate the row sizes
@@ -96,12 +97,28 @@ class ImageGridWidget : public QWidget
     void resizeWidgets();
 
 public:
+    /**
+     * @brief Constructor
+     *
+     * Sets default spacing to 0
+     * @param parent Owner of the widget
+     */
     explicit ImageGridWidget(QWidget *parent = 0);
+
+    /**
+     * @brief Constructor
+     * @param spacing Space between images in pixels
+     * @param parent Owner of the widget
+     */
     explicit ImageGridWidget(int spacing = 0, QWidget *parent = 0);
 
 signals:
 
 public slots:
+    /**
+     * @brief Set space between images in pixels
+     * @param spacing Space between images
+     */
     void setSpacing(int spacing);
 
 protected:
