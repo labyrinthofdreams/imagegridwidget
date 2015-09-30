@@ -126,6 +126,8 @@ Side getSide(const QPoint &needle, const QPoint &haystack) {
 // TODO: Implement changing spacing
 // TODO: Drag n' drop existing images in the layout
 // so that we don't have to undo the whole thing to reset
+// TODO: Drawing drop helper lines only work with 10px spacing
+// so we need to make it work with more or less pixels as well
 
 ImageGridWidget::ImageGridWidget(QWidget *parent) :
     ImageGridWidget(0, parent)
@@ -148,6 +150,41 @@ ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     setAcceptDrops(true);
     setLayout(layout_);
     setMouseTracking(true);
+}
+
+int ImageGridWidget::getRowCount() const
+{
+    if(grid_.isEmpty()) {
+        return 0;
+    }
+
+    return grid_.lastKey().first + 1;
+}
+
+int ImageGridWidget::getColumnCount(const int row) const
+{
+    if(row < 0) {
+        qWarning("ImageGridWidget::getColumnCount: Negative row: %d", row);
+        return 0;
+    }
+
+    const QList<Index> keys = grid_.keys();
+    return std::count_if(keys.cbegin(), keys.cend(),
+                         [&row](const Index &key){ return key.first == row; });
+}
+
+QIcon ImageGridWidget::iconAt(const int row, const int column) const
+{
+    return iconAt(qMakePair(row, column));
+}
+
+QIcon ImageGridWidget::iconAt(const ImageGridWidget::Index index) const
+{
+    if(!grid_.contains(index)) {
+        return {};
+    }
+
+    return grid_.value(index);
 }
 
 QMap<int, QSize> ImageGridWidget::calculateRowSizes() const
@@ -414,11 +451,16 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
 {
     QWidget::paintEvent(event);
 
+    QPainter painter(this);
+    if(!layout_->isEmpty() && layout_->spacing() > 0) {
+        painter.setBrush(QBrush(Qt::black));
+        painter.drawRect(QRect(0, 0, width(), height()));
+    }
+
     if(!isDragging_) {
         return;
     }
 
-    QPainter painter(this);
     painter.setPen(pen_);
     if(layout_->isEmpty()) {
         painter.drawLine(0, 0, width(), 0);

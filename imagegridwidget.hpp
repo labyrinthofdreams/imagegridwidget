@@ -122,6 +122,34 @@ public:
      */
     explicit ImageGridWidget(int spacing = 0, QWidget *parent = 0);
 
+    /**
+     * @brief Get number of rows
+     * @return Number of rows
+     */
+    int getRowCount() const;
+
+    /**
+     * @brief Get number of columns for a row
+     * @param row Row to get columns for
+     * @return Number of columns
+     */
+    int getColumnCount(int row) const;
+
+    /**
+     * @brief Get icon at index
+     * @param row Row
+     * @param column Column
+     * @return Icon or null icon if index is invalid
+     */
+    QIcon iconAt(int row, int column) const;
+
+    /**
+     * @brief iconAt Get icon at index
+     * @param index Index
+     * @return Icon or null icon if index is invalid
+     */
+    QIcon iconAt(Index index) const;
+
 signals:
 
 public slots:
