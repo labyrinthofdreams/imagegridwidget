@@ -258,6 +258,8 @@ void ImageGridWidget::insertBefore(const int row, const QIcon &icon)
     // 3. Insert the new icon where there's an empty row now
     newGrid.insert(qMakePair(row, 0), icon);
     grid_.swap(newGrid);
+
+    resizeWidgets();
 }
 
 void ImageGridWidget::insertBefore(const Index index, const QIcon &icon)
