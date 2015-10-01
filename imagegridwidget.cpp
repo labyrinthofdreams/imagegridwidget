@@ -368,6 +368,8 @@ void ImageGridWidget::setPen(const QPen &pen)
 void ImageGridWidget::setBackgroundColor(const QColor &color)
 {
     backgroundColor_ = color;
+
+    repaint();
 }
 
 void ImageGridWidget::dragEnterEvent(QDragEnterEvent *event)
