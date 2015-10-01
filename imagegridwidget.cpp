@@ -142,7 +142,8 @@ ImageGridWidget::ImageGridWidget(const int spacing, QWidget *parent) :
     isDragging_(false),
     grid_(),
     width_(0),
-    pen_(QPen(QBrush(Qt::blue, Qt::SolidPattern), 1))
+    pen_(QPen(QBrush(Qt::blue, Qt::SolidPattern), 1)),
+    backgroundColor_(Qt::transparent)
 {
     layout_->setSpacing(spacing);
     layout_->addSpacerItem(new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Expanding));
@@ -364,6 +365,11 @@ void ImageGridWidget::setPen(const QPen &pen)
     pen_ = pen;
 }
 
+void ImageGridWidget::setBackgroundColor(const QColor &color)
+{
+    backgroundColor_ = color;
+}
+
 void ImageGridWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     event->accept();
@@ -454,8 +460,9 @@ void ImageGridWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 
     QPainter painter(this);
-    if(!layout_->isEmpty() && layout_->spacing() > 0) {
-        painter.setBrush(QBrush(Qt::black));
+    if(!layout_->isEmpty() && layout_->spacing() > 0
+            && backgroundColor_ != Qt::transparent) {
+        painter.setBrush(QBrush(backgroundColor_));
         painter.drawRect(QRect(0, 0, width(), height()));
     }
 

@@ -25,6 +25,7 @@ THE SOFTWARE.
 #ifndef IMAGEGRIDWIDGET_HPP
 #define IMAGEGRIDWIDGET_HPP
 
+#include <QColor>
 #include <QIcon>
 #include <QMap>
 #include <QPair>
@@ -64,6 +65,9 @@ class ImageGridWidget : public QWidget
 
     //! Pen for drawing helper lines
     QPen pen_;
+
+    //! Background color
+    QColor backgroundColor_;
 
     /**
      * @brief Insert icon as a new row before row
@@ -172,6 +176,12 @@ public slots:
      * @param pen New pen
      */
     void setPen(const QPen &pen);
+
+    /**
+     * @brief Set background color
+     * @param color New color
+     */
+    void setBackgroundColor(const QColor &color);
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
