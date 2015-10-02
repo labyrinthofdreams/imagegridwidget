@@ -461,7 +461,7 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
     auto x = h.first;
     const auto xIdx = h.second;
     if(point_.x() > x) {
-        insertBefore(qMakePair(idx, xIdx + 1), icon);
+        insertBefore(qMakePair(idx, xIdx), icon);
         return;
     }
 
