@@ -448,6 +448,7 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
     const auto idx = v.second;
     if(point_.y() > y) {
         insertBefore(idx, icon);
+        repaint();
         return;
     }
 
@@ -462,6 +463,7 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
     const auto xIdx = h.second;
     if(point_.x() > x) {
         insertBefore(qMakePair(idx, xIdx), icon);
+        repaint();
         return;
     }
 
