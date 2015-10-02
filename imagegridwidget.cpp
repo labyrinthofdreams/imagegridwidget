@@ -541,6 +541,7 @@ void ImageGridWidget::mousePressEvent(QMouseEvent *event)
 
         // Then remove the layout
         layout_->removeItem(lo);
+        lo->deleteLater();
 
         removeAt(yIdx);
     }
