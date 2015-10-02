@@ -38,6 +38,7 @@ class QDragEnterEvent;
 class QDragLeaveEvent;
 class QDragMoveEvent;
 class QDropEvent;
+class QMouseEvent;
 class QPaintEvent;
 class QVBoxLayout;
 
@@ -106,6 +107,18 @@ class ImageGridWidget : public QWidget
      * @brief Resize widgets
      */
     void resizeWidgets();
+
+    /**
+     * @brief Remove icon at row row
+     * @param row Row to remove
+     */
+    void removeAt(int row);
+
+    /**
+     * @brief Remove icon at index index
+     * @param index Index to remove
+     */
+    void removeAt(Index index);
 
 public:
     /**
@@ -191,6 +204,8 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event) override;
 
     void dropEvent(QDropEvent *event) override;
+
+    void mousePressEvent(QMouseEvent *event) override;
 
     void paintEvent(QPaintEvent *event) override;
 };

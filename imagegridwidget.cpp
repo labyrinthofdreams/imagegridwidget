@@ -30,7 +30,9 @@ THE SOFTWARE.
 #include <QHBoxLayout>
 #include <QIcon>
 #include <QLabel>
+#include <QLayoutItem>
 #include <QListWidget>
+#include <QMouseEvent>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPen>
@@ -336,6 +338,35 @@ void ImageGridWidget::resizeWidgets()
     }
 }
 
+void ImageGridWidget::removeAt(const ImageGridWidget::Index index)
+{
+    const auto cols = getColumnCount(index.first);
+    grid_.remove(index);
+    for(auto c = index.second + 1; c < cols; ++c) {
+        const QIcon icon = grid_.take(qMakePair(index.first, c));
+        grid_.insert(qMakePair(index.first, c - 1), icon);
+    }
+}
+
+void ImageGridWidget::removeAt(const int row)
+{
+    // Remove everything from row row
+    const auto cols = getColumnCount(row);
+    for(auto idx = 0; idx < cols; ++idx) {
+        grid_.remove(qMakePair(row, idx));
+    }
+
+    // Then move the other rows down by one
+    const auto rows = getRowCount();
+    for(auto r = row; r < rows; ++r) {
+        const auto cols = getColumnCount(r);
+        for(auto c = 0; c < cols; ++c) {
+            const QIcon icon = grid_.take(qMakePair(r, c));
+            grid_.insert(qMakePair(r - 1, c), icon);
+        }
+    }
+}
+
 void ImageGridWidget::setSpacing(const int spacing)
 {
     if(spacing < 0) {
@@ -455,6 +486,70 @@ void ImageGridWidget::dropEvent(QDropEvent *event)
     }
 
     repaint();
+}
+
+void ImageGridWidget::mousePressEvent(QMouseEvent *event)
+{
+    const auto rowCount = layout_->count() - 1;
+    if(rowCount == 0) {
+        return;
+    }
+
+    const QPoint pos = event->pos();
+    QLayoutItem *li = nullptr;
+    auto height = 0;
+    auto yIdx = 0;
+    for(; yIdx < rowCount; ++yIdx) {
+        li = layout_->itemAt(yIdx);
+        height += li->sizeHint().height() + layout_->spacing();
+        if(pos.y() <= height) {
+            break;
+        }
+    }
+
+    if(pos.y() > height) {
+        // We don't want to remove the last widget
+        // if the mouse press happens below it
+        return;
+    }
+
+    auto width = 0;
+    QLayoutItem *li2 = nullptr;
+    QHBoxLayout *lo = qobject_cast<QHBoxLayout*>(li->layout());
+    const auto colCount = lo->count() - 1;
+    auto xIdx = 0;
+    for(; xIdx < colCount; ++xIdx) {
+        li2 = lo->itemAt(xIdx);
+        width += li2->sizeHint().width() + lo->spacing();
+        if(pos.x() <= width) {
+            break;
+        }
+    }
+
+    if(pos.x() > width) {
+        return;
+    }
+
+    if(lo && colCount == 1) {
+        // Remove widget and spacer item
+        for(auto idx = 0; idx < lo->count(); ++idx) {
+            lo->itemAt(idx)->widget()->deleteLater();
+            lo->removeItem(lo->itemAt(idx));
+        }
+
+        // Then remove the layout
+        layout_->removeItem(lo);
+
+        removeAt(yIdx);
+    }
+    else if(lo) {
+        li2->widget()->deleteLater();
+        lo->removeItem(li2);
+
+        removeAt(qMakePair(yIdx, xIdx));
+    }
+
+    resizeWidgets();
 }
 
 void ImageGridWidget::paintEvent(QPaintEvent *event)
